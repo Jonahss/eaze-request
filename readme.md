@@ -53,7 +53,7 @@ Default: `{json: true, timeout: 15000}`
 
 Type: `string`
 
-A token to use as the `X-Auth-Header`.
+A token to use as the `X-Auth-Token` header.
 
 ##### callback
 
