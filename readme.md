@@ -1,4 +1,4 @@
-# eaze-request [![Build Status](https://travis-ci.org/bendrucker/eaze-request.svg?branch=master)](https://travis-ci.org/bendrucker/eaze-request)
+# eaze-request [![Build Status](https://travis-ci.org/eaze/eaze-request.svg?branch=master)](https://travis-ci.org/eaze/eaze-request)
 
 > Make requests to the Eaze API
 

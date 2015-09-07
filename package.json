@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Make requests to the Eaze API",
   "license": "MIT",
-  "repository": "bendrucker/eaze-request",
+  "repository": "eaze/eaze-request",
   "author": {
     "name": "Ben Drucker",
     "email": "bvdrucker@gmail.com",
