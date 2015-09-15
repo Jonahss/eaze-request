@@ -64,7 +64,7 @@ Arguments: `err, data`
 
 Type: `error`
 
-A request error. Responses with non-200 range status codes are considered errors.
+A request error. Responses with non-200 range status codes are considered errors. If the server sent an error message, that message will be used. If not, a generic HTTP message will be provided instead. Errors will always have a `statusCode` property.
 
 ###### data
 
