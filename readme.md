@@ -16,9 +16,9 @@ $ npm install --save eaze-request
 var Eaze = require('eaze-request')
 
 var request = Eaze('https://the/api/base')
-request('the/endpoint', options, function (err, data, response) {
-  //=> data = {...}
-  //=> response = {statusCode: 200, ...}  
+request('the/endpoint', options, function (err, data) {
+  //=> err = null / Error
+  //=> data = {...} / undefined
 })
 ```
 
@@ -58,24 +58,19 @@ A token to use as the `X-Auth-Token` header.
 ##### callback
 
 Type: `function`  
-Arguments: `err, data, response`
+Arguments: `err, data`
 
 ###### err
 
 Type: `error`
 
-A request error. Responses with non-200 range status codes are considered errorrs.
+A request error. Responses with non-200 range status codes are considered errors.
 
 ###### data
 
 Type: `object`
 
 The JSON response data.
-
-###### response
-
-The response object from [xhr-request](https://github.com/Jam3/xhr-request), including properties like `statusCode`.
-
 
 ## License
 
