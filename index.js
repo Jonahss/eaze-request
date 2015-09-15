@@ -4,6 +4,9 @@ var extend = require('xtend')
 var join = require('url-join')
 var request = require('xhr-request')
 var httpError = require('http-status-error')
+var isError = require('is-error-code')
+var isObject = require('is-obj')
+var parse = require('safe-json-parse')
 
 module.exports = EazeClient
 
@@ -43,9 +46,23 @@ function setToken (options) {
 
 function responseHandler (callback) {
   return function handleResponse (err, data, response) {
-    if (err) return callback(err, data, response)
-    err = httpError(response.statusCode)
-    callback(err, data, response)
+    if (err) return callback(err)
+    if (isError(response.statusCode)) return createError(data, response, callback)
+    callback(null, data)
+  }
+}
+
+function createError (data, response, callback) {
+  var err = httpError(response.statusCode)
+  if (!data) return callback(err)
+  if (data) {
+    if (isObject(data)) {
+      if (data.message) {
+        err.message = data.message
+      }
+      return callback(err)
+    }
+    parse(data, callback)
   }
 }
 

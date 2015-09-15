@@ -6,28 +6,29 @@ var Eaze = require('./')
 var request = Eaze('https://api.eazeup.com/api')
 
 test('success', function (t) {
-  t.plan(2)
+  t.plan(1)
 
   request('verify', {
     query: {
       zipCode: '94105'
     }
-  }, function (err, data, response) {
+  }, function (err, data) {
     if (err) return t.end(err)
     t.deepEqual(data, {
       isSuccess: true,
       message: ''
     })
-    t.equal(response.statusCode, 200)
   })
 })
 
 test('fail', function (t) {
-  t.plan(3)
+  t.plan(4)
 
-  request.post('foo', function (err, data, response) {
+  request.post('foo', function (err, data) {
     t.ok(err)
-    t.equal(err.message, 'Not Found (404)')
-    t.equal(typeof data, 'object')
+    console.log(data)
+    t.ok(/No HTTP resource was found that matches/.test(err.message))
+    t.equal(err.statusCode, 404)
+    t.notOk(data)
   })
 })
