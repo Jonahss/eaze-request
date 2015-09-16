@@ -53,17 +53,22 @@ function responseHandler (callback) {
 }
 
 function createError (data, response, callback) {
-  var err = httpError(response.statusCode)
-  if (!data) return callback(err)
+  var error = httpError(response.statusCode)
+  if (!data) return callback(error)
   if (data) {
     if (isObject(data)) {
-      if (data.message) {
-        err.message = data.message
-      }
-      return callback(err)
+      return callback(assignMessage(error, data))
     }
-    parse(data, callback)
+    parse(data, function (err, json) {
+      if (err) return callback(err)
+      callback(assignMessage(error, json))
+    })
   }
+}
+
+function assignMessage (err, data) {
+  if (data.message) err.message = data.message
+  return err
 }
 
 function httpMethods (request) {
