@@ -67,7 +67,11 @@ function createError (data, response, callback) {
 }
 
 function assignMessage (err, data) {
-  if (data.message) err.message = data.message
+  if (data.messageDetail) {
+    err.message = data.messageDetail
+  } else if (data.message) {
+    err.message = data.message
+  }
   return err
 }
 
