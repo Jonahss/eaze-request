@@ -24,10 +24,10 @@ test('success', function (t) {
 test('fail', function (t) {
   t.plan(4)
 
-  request.post('foo', function (err, data) {
+  request.get('orders/123', function (err, data) {
     t.ok(err)
-    t.ok(/No HTTP resource was found that matches/.test(err.message))
-    t.equal(err.statusCode, 404)
+    t.ok(/Authorization/.test(err.message))
+    t.equal(err.statusCode, 401)
     t.notOk(data)
   })
 })
@@ -37,7 +37,7 @@ test('fail with no expected success response', function (t) {
 
   request.post('foo', {responseType: ''}, function (err, data) {
     t.ok(err)
-    t.ok(/No HTTP resource was found that matches/.test(err.message))
+    t.ok(/No type was found/.test(err.message))
     t.equal(err.statusCode, 404)
     t.notOk(data)
   })
