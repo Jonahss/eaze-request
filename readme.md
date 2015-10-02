@@ -72,6 +72,22 @@ Type: `object`
 
 The JSON response data.
 
+#### `request.onError(listener)` -> `function`
+
+Listens on all request errors. Returns an unlisten function.
+
+##### listener
+
+Type: `function`  
+Arguments: `data`
+
+`data` contains:
+* `err`
+* `statusCode`
+* `headers`
+* `url`
+* `method`
+
 ## License
 
 MIT © [Ben Drucker](http://bendrucker.me)

@@ -7,6 +7,7 @@ var httpError = require('http-status-error')
 var isError = require('is-error-code')
 var isObject = require('is-obj')
 var parse = require('safe-json-parse')
+var Event = require('geval/event')
 
 module.exports = EazeClient
 
@@ -19,6 +20,9 @@ var methods = ['get', 'post', 'put', 'patch', 'head', 'delete']
 
 function EazeClient (baseUrl) {
   baseUrl = baseUrl || ''
+
+  var ErrorEvent = Event()
+  eazeRequest.onError = ErrorEvent.listen
 
   return httpMethods(eazeRequest)
 
@@ -33,7 +37,17 @@ function EazeClient (baseUrl) {
     setToken(options)
     var url = join(baseUrl, path)
 
-    return request(url, options, responseHandler(callback))
+    return request(url, options, responseHandler(callback, broadcastError))
+  }
+
+  function broadcastError (err, response) {
+    ErrorEvent.broadcast({
+      err: err,
+      statusCode: response.statusCode,
+      headers: response.headers,
+      method: response.method,
+      url: response.url
+    })
   }
 }
 
@@ -44,10 +58,18 @@ function setToken (options) {
   delete options.token
 }
 
-function responseHandler (callback) {
+function responseHandler (callback, broadcastError) {
   return function handleResponse (err, data, response) {
-    if (err) return callback(err)
-    if (isError(response.statusCode)) return createError(data, response, callback)
+    if (err) {
+      callback(err)
+      return broadcastError(err, response)
+    }
+    if (isError(response.statusCode)) {
+      return createError(data, response, function (err) {
+        callback(err)
+        broadcastError(err, response)
+      })
+    }
     callback(null, data)
   }
 }

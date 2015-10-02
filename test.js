@@ -22,13 +22,22 @@ test('success', function (t) {
 })
 
 test('fail', function (t) {
-  t.plan(4)
+  t.plan(9)
 
   request.get('orders/123', function (err, data) {
     t.ok(err)
     t.ok(/Authorization/.test(err.message))
     t.equal(err.statusCode, 401)
     t.notOk(data)
+  })
+
+  var unlisten = request.onError(function (data) {
+    t.ok(data.err)
+    t.ok(/Authorization/.test(data.err.message))
+    t.equal(data.statusCode, 401)
+    t.ok(data.headers)
+    t.ok(data.url)
+    unlisten()
   })
 })
 
