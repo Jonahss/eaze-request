@@ -8,6 +8,7 @@ var isError = require('is-error-code')
 var isObject = require('is-obj')
 var parse = require('safe-json-parse')
 var Event = require('geval/event')
+var Query = require('query-string-flatten')
 
 module.exports = EazeClient
 
@@ -34,7 +35,9 @@ function EazeClient (baseUrl) {
     }
 
     options = extend(defaults, options)
+    // options is now mutable
     setToken(options)
+    setQuery(options)
     var url = join(baseUrl, path)
 
     return request(url, options, responseHandler(callback, broadcastError))
@@ -56,6 +59,12 @@ function setToken (options) {
   options.headers = options.headers || {}
   options.headers['X-Auth-Token'] = options.token
   delete options.token
+}
+
+function setQuery (options) {
+  var query = options.query
+  if (!query) return
+  options.query = (typeof query === 'string' ? String : Query)(query)
 }
 
 function responseHandler (callback, broadcastError) {
