@@ -33,6 +33,7 @@
     "query-string-flatten": "~1.0.0",
     "safe-json-parse": "~4.0.0",
     "url-join": "0.0.1",
+    "url-parse": "~1.0.5",
     "xhr-request": "~1.0.1",
     "xtend": "~4.0.0"
   }

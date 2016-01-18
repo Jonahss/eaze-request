@@ -72,9 +72,9 @@ Type: `object`
 
 The JSON response data.
 
-#### `request.onError(listener)` -> `function`
+#### `request.onResult(listener)` -> `function`
 
-Listens on all request errors. Returns an unlisten function.
+Listens on all responses. Returns an unlisten function.
 
 ##### listener
 
@@ -82,11 +82,13 @@ Type: `function`
 Arguments: `data`
 
 `data` contains:
-* `err`
-* `statusCode`
-* `headers`
-* `url`
 * `method`
+* `path`
+* `query`
+* `status`
+* `timeout`
+* `times` (`{start, end}`)
+* `duration`
 
 ## License
 

@@ -22,7 +22,7 @@ test('success', function (t) {
 })
 
 test('fail', function (t) {
-  t.plan(9)
+  t.plan(4)
 
   request.get('orders/123', function (err, data) {
     t.ok(err)
@@ -30,14 +30,49 @@ test('fail', function (t) {
     t.equal(err.statusCode, 401)
     t.notOk(data)
   })
+})
 
-  var unlisten = request.onError(function (data) {
-    t.ok(data.err)
-    t.ok(/Authorization/.test(data.err.message))
-    t.equal(data.statusCode, 401)
-    t.ok(data.headers)
-    t.ok(data.url)
-    unlisten()
+test('onResult', function (t) {
+  t.test('success', function (t) {
+    t.plan(7)
+
+    request.get('ping', noop)
+
+    var unlisten = request.onResult(function (data) {
+      t.equal(data.method, 'get')
+      t.equal(data.path, '/ping')
+      t.deepEqual(data.query, {})
+      t.equal(data.status, 200)
+      t.equal(data.timeout, false)
+      t.ok(data.times)
+      t.ok(data.duration > 0 && data.duration < 2000)
+      unlisten()
+    })
+  })
+
+  t.test('fail', function (t) {
+    t.plan(3)
+
+    request.get('foo?bar=baz', noop)
+
+    var unlisten = request.onResult(function (data) {
+      t.deepEqual(data.query, {bar: 'baz'})
+      t.equal(data.status, 404)
+      t.equal(data.timeout, false)
+      unlisten()
+    })
+  })
+
+  t.test('timeout', function (t) {
+    t.plan(2)
+
+    request.get('ping', {timeout: 10}, noop)
+
+    var unlisten = request.onResult(function (data) {
+      t.equal(data.status, 0)
+      t.equal(data.timeout, true)
+      unlisten()
+    })
   })
 })
 
@@ -51,3 +86,5 @@ test('fail with no expected success response', function (t) {
     t.notOk(data)
   })
 })
+
+function noop () {}
