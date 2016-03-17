@@ -32,6 +32,16 @@ test('fail', function (t) {
   })
 })
 
+test('client error', function (t) {
+  t.plan(3)
+
+  request.get('ping', {timeout: 10}, function (err, data) {
+    t.ok(err)
+    t.ok(err.timeout)
+    t.ok(/trouble reaching Eaze/.test(err.message))
+  })
+})
+
 test('onResult', function (t) {
   t.test('success', function (t) {
     t.plan(7)
@@ -45,7 +55,7 @@ test('onResult', function (t) {
       t.equal(data.status, 200)
       t.equal(data.timeout, false)
       t.ok(data.times)
-      t.ok(data.duration > 0 && data.duration < 2000)
+      t.ok(data.duration > 0)
       unlisten()
     })
   })

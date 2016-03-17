@@ -10,6 +10,7 @@ var jsonParse = require('safe-json-parse')
 var Event = require('geval/event')
 var Query = require('query-string-flatten')
 var urlParse = require('url-parse')
+var assign = require('xtend/mutable')
 
 module.exports = EazeClient
 
@@ -83,7 +84,7 @@ function responseHandler (callback, broadcast, options) {
       duration: end - start
     })
 
-    if (err) return callback(err)
+    if (err) return callback(clientError(err))
 
     if (isError(response.statusCode)) {
       return createError(data, response, function (err) {
@@ -93,6 +94,12 @@ function responseHandler (callback, broadcast, options) {
 
     callback(null, data)
   }
+}
+
+function clientError (err) {
+  return assign(new Error('We\'re having trouble reaching Eaze\'s servers—please try again.'), {
+    timeout: err.message && err.message.indexOf('timeout')
+  })
 }
 
 function createError (data, response, callback) {
