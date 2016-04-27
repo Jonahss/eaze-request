@@ -76,7 +76,7 @@ function responseHandler (callback, broadcast, options) {
       path: parsed.pathname,
       query: parsed.query || {},
       status: response ? response.statusCode : 0,
-      timeout: Boolean(err && err.code === 'ETIMEDOUT'),
+      timeout: isTimeout(err),
       times: {
         start: start,
         end: end
@@ -98,8 +98,12 @@ function responseHandler (callback, broadcast, options) {
 
 function clientError (err) {
   return assign(new Error('We\'re having trouble reaching Eaze\'s servers—please try again.'), {
-    timeout: err.code === 'ETIMEDOUT'
+    timeout: isTimeout(err)
   })
+}
+
+function isTimeout (err) {
+  return Boolean(err) && (err.code === 'ETIMEDOUT' || err.statusCode === 0)
 }
 
 function createError (data, response, callback) {
