@@ -11,7 +11,7 @@
     "url": "bendrucker.me"
   },
   "scripts": {
-    "test": "standard && tape test.js"
+    "test": "standard && tape test.js && zuul --phantom --ui tape -- test.js"
   },
   "keywords": [
     "eaze",
@@ -19,8 +19,10 @@
     "api"
   ],
   "devDependencies": {
+    "phantomjs-prebuilt": "~2.1.7",
+    "standard": "^4.0.0",
     "tape": "^4.0.0",
-    "standard": "^4.0.0"
+    "zuul": "~3.10.1"
   },
   "files": [
     "index.js"
