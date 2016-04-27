@@ -37,7 +37,7 @@ test('client error', function (t) {
 
   request.get('ping', {timeout: 10}, function (err, data) {
     t.ok(err)
-    t.ok(err.timeout)
+    t.equal(err.timeout, true)
     t.ok(/trouble reaching Eaze/.test(err.message))
   })
 })

@@ -98,7 +98,7 @@ function responseHandler (callback, broadcast, options) {
 
 function clientError (err) {
   return assign(new Error('We\'re having trouble reaching Eaze\'s servers—please try again.'), {
-    timeout: err.message && err.message.indexOf('timeout')
+    timeout: err.code === 'ETIMEDOUT'
   })
 }
 
