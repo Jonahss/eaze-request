@@ -15,6 +15,7 @@ var assign = require('xtend/mutable')
 module.exports = EazeClient
 
 var defaults = {
+  baseUrl: '',
   method: 'get',
   json: true,
   timeout: 15000
@@ -22,8 +23,12 @@ var defaults = {
 
 var methods = ['get', 'post', 'put', 'patch', 'head', 'delete']
 
-function EazeClient (baseUrl) {
-  baseUrl = baseUrl || ''
+function EazeClient (clientOptions) {
+  if (typeof clientOptions === 'string') {
+    clientOptions = {baseUrl: clientOptions}
+  }
+
+  clientOptions = extend(defaults, clientOptions)
 
   var ResultEvent = Event()
   eazeRequest.onResult = ResultEvent.listen
@@ -37,14 +42,14 @@ function EazeClient (baseUrl) {
       options = {}
     }
 
-    options = extend(defaults, options)
+    options = extend(clientOptions, options)
     // options is now mutable
     setToken(options)
     setQuery(options)
-    var url = join(baseUrl, path)
+    var url = join(options.baseUrl, path)
 
     return request(url, options, responseHandler(callback, ResultEvent.broadcast, {
-      base: baseUrl,
+      baseUrl: options.baseUrl,
       url: url,
       method: options.method
     }))
@@ -68,7 +73,7 @@ function responseHandler (callback, broadcast, options) {
   var start = new Date()
 
   return function handleResponse (err, data, response) {
-    var parsed = urlParse(options.url.replace(options.base, ''), true)
+    var parsed = urlParse(options.url.replace(options.baseUrl, ''), true)
     var end = new Date()
 
     broadcast({

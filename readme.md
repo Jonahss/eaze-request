@@ -15,7 +15,7 @@ $ npm install --save eaze-request
 ```js
 var Eaze = require('eaze-request')
 
-var request = Eaze('https://the/api/base')
+var request = Eaze({baseUrl: 'https://the/api/base'})
 request('the/endpoint', options, function (err, data) {
   //=> err = null / Error
   //=> data = {...} / undefined
@@ -24,14 +24,17 @@ request('the/endpoint', options, function (err, data) {
 
 ## API
 
-#### `Eaze(baseUrl)` -> `function`
+#### `Eaze(options)` -> `function`
 
-##### baseUrl
+Returns the `request` function.
 
-Type: `string`  
-Default: `''`
+##### options
 
-The base URL for API requests. Returns the `request` function.
+Type: `object`
+Default: `{baseUrl: '', method: 'get', json: true, timeout: 15000}`
+
+Default options to be used with all requests made by the client.
+
 
 #### `request(path, [options], [callback])` -> `request`
 
@@ -44,10 +47,10 @@ The API request path.
 
 ##### options
 
-Request settings, mostly passed to [xhr-request](https://github.com/Jam3/xhr-request). 
+Request settings, mostly passed to [xhr-request](https://github.com/Jam3/xhr-request).
 
 Type: `object`  
-Default: `{json: true, timeout: 15000}`
+Default: `{}`
 
 ###### token
 
