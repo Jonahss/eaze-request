@@ -2,7 +2,7 @@
 
 var extend = require('xtend')
 var join = require('url-join')
-var request = require('xhr-request')
+var request = require('request')
 var httpError = require('http-status-error')
 var isError = require('is-error-code')
 var isObject = require('is-obj')
@@ -45,11 +45,10 @@ function EazeClient (clientOptions) {
     // options is now mutable
     setToken(options)
     setQuery(options)
-    var url = join(options.baseUrl, path)
 
-    return request(url, options, responseHandler(callback, ResultEvent.broadcast, {
+    return request(path, options, responseHandler(callback, ResultEvent.broadcast, {
       baseUrl: options.baseUrl,
-      url: url,
+      url: path,
       method: options.method
     }))
   }
@@ -71,7 +70,7 @@ function setQuery (options) {
 function responseHandler (callback, broadcast, options) {
   var start = new Date()
 
-  return function handleResponse (err, data, response) {
+  return function handleResponse (err, response, data) {
     var parsed = urlParse(options.url.replace(options.baseUrl, ''), true)
     var end = new Date()
 

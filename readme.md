@@ -47,7 +47,7 @@ The API request path.
 
 ##### options
 
-Request settings, mostly passed to [xhr-request](https://github.com/Jam3/xhr-request).
+Request settings, mostly passed to [request](https://github.com/request/request).
 
 Type: `object`  
 Default: `{}`
