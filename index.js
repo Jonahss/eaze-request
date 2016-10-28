@@ -10,7 +10,6 @@ var jsonParse = require('safe-json-parse')
 var Event = require('geval/event')
 var Query = require('query-string-flatten')
 var urlParse = require('url-parse')
-var assign = require('xtend/mutable')
 
 module.exports = EazeClient
 
