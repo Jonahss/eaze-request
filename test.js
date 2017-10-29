@@ -33,47 +33,6 @@ test('client error', function (t) {
   })
 })
 
-test('onResult', function (t) {
-  t.test('success', function (t) {
-    t.plan(6)
-
-    request.get('ping', noop)
-
-    var unlisten = request.onResult(function (data) {
-      t.equal(data.method, 'get')
-      t.equal(data.path, '/ping')
-      t.deepEqual(data.query, {})
-      t.equal(data.status, 200)
-      t.ok(data.times)
-      t.ok(data.duration > 0)
-      unlisten()
-    })
-  })
-
-  t.test('fail', function (t) {
-    t.plan(2)
-
-    request.get('foo?bar=baz', noop)
-
-    var unlisten = request.onResult(function (data) {
-      t.deepEqual(data.query, {bar: 'baz'})
-      t.equal(data.status, 404)
-      unlisten()
-    })
-  })
-
-  t.test('timeout', function (t) {
-    t.plan(1)
-
-    request.get('ping', {timeout: 10}, noop)
-
-    var unlisten = request.onResult(function (data) {
-      t.equal(data.status, 0)
-      unlisten()
-    })
-  })
-})
-
 test('fail with no expected success response', function (t) {
   t.plan(3)
 
@@ -83,5 +42,3 @@ test('fail with no expected success response', function (t) {
     t.notOk(data)
   })
 })
-
-function noop () {}

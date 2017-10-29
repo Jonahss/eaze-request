@@ -1,15 +1,12 @@
 'use strict'
 
 var extend = require('xtend')
-var join = require('url-join')
 var request = require('request')
 var httpError = require('http-status-error')
 var isError = require('is-error-code')
 var isObject = require('is-obj')
 var jsonParse = require('safe-json-parse')
-var Event = require('geval/event')
 var Query = require('query-string-flatten')
-var urlParse = require('url-parse')
 var assign = require('xtend/mutable')
 
 module.exports = EazeClient
@@ -30,9 +27,6 @@ function EazeClient (clientOptions) {
 
   clientOptions = extend(defaults, clientOptions)
 
-  var ResultEvent = Event()
-  eazeRequest.onResult = ResultEvent.listen
-
   return httpMethods(eazeRequest)
 
   function eazeRequest (path, options, callback) {
@@ -47,11 +41,7 @@ function EazeClient (clientOptions) {
     setToken(options)
     setQuery(options)
 
-    return request(path, options, responseHandler(callback, ResultEvent.broadcast, {
-      baseUrl: options.baseUrl,
-      url: path,
-      method: options.method
-    }))
+    return request(path, options, responseHandler(callback))
   }
 }
 
@@ -68,26 +58,9 @@ function setQuery (options) {
   options.query = (typeof query === 'string' ? String : Query)(query)
 }
 
-function responseHandler (callback, broadcast, options) {
-  var start = new Date()
+function responseHandler (callback) {
 
   return function handleResponse (err, response, data) {
-    var parsed = urlParse(options.url.replace(options.baseUrl, ''), true)
-    var end = new Date()
-
-    broadcast({
-      method: options.method.toLowerCase(),
-      path: parsed.pathname,
-      query: parsed.query || {},
-      status: response ? response.statusCode : 0,
-      timeout: isTimeout(err),
-      times: {
-        start: start,
-        end: end
-      },
-      duration: end - start
-    })
-
     if (err) return callback(clientError(err))
 
     if (isError(response.statusCode)) {

@@ -75,23 +75,6 @@ Type: `object`
 
 The JSON response data.
 
-#### `request.onResult(listener)` -> `function`
-
-Listens on all responses. Returns an unlisten function.
-
-##### listener
-
-Type: `function`  
-Arguments: `data`
-
-`data` contains:
-* `method`
-* `path`
-* `query`
-* `status`
-* `times` (`{start, end}`)
-* `duration`
-
 ## License
 
 MIT © [Ben Drucker](http://bendrucker.me)
