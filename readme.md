@@ -16,10 +16,8 @@ $ npm install --save eaze-request
 var Eaze = require('eaze-request')
 
 var request = Eaze({baseUrl: 'https://the/api/base'})
-request('the/endpoint', options, function (err, data) {
-  //=> err = null / Error
-  //=> data = {...} / undefined
-})
+request('the/endpoint', options)
+// returns a promise of the response body
 ```
 
 ## API
@@ -57,11 +55,6 @@ Default: `{}`
 Type: `string`
 
 A token to use as the `X-Auth-Token` header.
-
-##### callback
-
-Type: `function`  
-Arguments: `err, data`
 
 ###### err
 

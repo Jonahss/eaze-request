@@ -11,7 +11,7 @@
     "url": "bendrucker.me"
   },
   "scripts": {
-    "test": "standard && tape test.js && zuul --phantom --ui tape -- test.js"
+    "test": "standard && tape test.js"
   },
   "keywords": [
     "eaze",
@@ -19,21 +19,17 @@
     "api"
   ],
   "devDependencies": {
-    "phantomjs-prebuilt": "~2.1.7",
-    "standard": "^4.0.0",
-    "tape": "^4.0.0",
-    "zuul": "~3.10.1"
+    "blue-tape": "^1.0.0",
+    "standard": "^10.0.3",
+    "tape": "^4.0.0"
   },
   "files": [
     "index.js"
   ],
   "dependencies": {
-    "http-status-error": "~1.1.1",
-    "is-error-code": "~1.0.0",
-    "is-obj": "~1.0.0",
     "query-string-flatten": "~1.0.0",
     "request": "^2.83.0",
-    "safe-json-parse": "~4.0.0",
+    "request-promise": "^4.2.2",
     "xtend": "~4.0.0"
   }
 }
